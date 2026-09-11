@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { vReveal } from '../composables/useScrollReveal'
 import StepFlow from './StepFlow.vue'
 import CycleFlow from './CycleFlow.vue'
@@ -138,6 +139,22 @@ const deploySteps = [
     ring: 'ring-emerald-500/40',
   },
 ]
+
+const selectedPipelineIndex = ref(0)
+
+const selectPipelineStep = (index) => {
+  selectedPipelineIndex.value = index
+}
+
+const previousPipelineStep = () => {
+  selectPipelineStep(Math.max(0, selectedPipelineIndex.value - 1))
+}
+
+const nextPipelineStep = () => {
+  selectPipelineStep(
+    Math.min(pipelineSteps.length - 1, selectedPipelineIndex.value + 1),
+  )
+}
 </script>
 
 <template>
@@ -208,46 +225,102 @@ const deploySteps = [
           <div
             v-for="(step, i) in pipelineSteps"
             :key="step.title"
-            class="relative flex gap-4"
+            class="relative"
           >
-            <div class="flex flex-col items-center">
-              <div
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-950/80 ring-1"
-                :class="accentClasses[accentCycle[i % 3]].ring"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  :class="accentClasses[accentCycle[i % 3]].text"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <button
+              type="button"
+              class="group flex w-full gap-4 rounded-xl border border-transparent p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-800 hover:bg-slate-950/45 focus-visible:border-cyan-500/40 focus-visible:outline-none"
+              :class="selectedPipelineIndex === i && 'border-cyan-500/30 bg-slate-950/55 shadow-lg shadow-cyan-950/20'"
+              :aria-label="`${step.title}: ${step.description}`"
+              :aria-pressed="selectedPipelineIndex === i"
+              @click="selectPipelineStep(i)"
+              @focus="selectPipelineStep(i)"
+            >
+              <div class="flex flex-col items-center">
+                <div
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-950/80 ring-1 transition-all duration-200 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-cyan-400/70"
+                  :class="[
+                    accentClasses[accentCycle[i % 3]].ring,
+                    selectedPipelineIndex === i && 'ring-2 ring-cyan-400/70',
+                  ]"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.75"
-                    :d="step.icon"
-                  />
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    :class="accentClasses[accentCycle[i % 3]].text"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.75"
+                      :d="step.icon"
+                    />
+                  </svg>
+                </div>
+                <span
+                  v-if="i < pipelineSteps.length - 1"
+                  class="mt-2 hidden w-px flex-1 bg-slate-800 sm:block"
+                />
               </div>
-              <span
-                v-if="i < pipelineSteps.length - 1"
-                class="mt-2 hidden w-px flex-1 bg-slate-800 sm:block"
-              />
-            </div>
-            <div class="pb-2">
-              <p class="flex items-center gap-2 text-xs font-mono text-slate-500">
-                <span :class="accentClasses[accentCycle[i % 3]].dot" class="h-1 w-1 rounded-full" />
-                STEP {{ String(i + 1).padStart(2, '0') }}
+              <div class="pb-2">
+                <p class="flex items-center gap-2 font-mono text-xs text-slate-500">
+                  <span :class="accentClasses[accentCycle[i % 3]].dot" class="h-1 w-1 rounded-full" />
+                  STEP {{ String(i + 1).padStart(2, '0') }}
+                </p>
+                <h4
+                  class="mt-1 text-sm font-semibold transition-colors"
+                  :class="selectedPipelineIndex === i ? 'text-cyan-200' : 'text-slate-100'"
+                >
+                  {{ step.title }}
+                </h4>
+                <p class="mt-1.5 text-sm leading-relaxed text-slate-400">
+                  {{ step.description }}
+                </p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="relative mt-8 flex flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          aria-live="polite"
+        >
+          <div class="flex items-start gap-3">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 font-mono text-[10px] text-cyan-300">
+              {{ String(selectedPipelineIndex + 1).padStart(2, '0') }}
+            </span>
+            <div>
+              <p class="text-[10px] font-semibold uppercase tracking-widest text-cyan-400/80">
+                Selected stage · {{ selectedPipelineIndex + 1 }} of {{ pipelineSteps.length }}
               </p>
-              <h4 class="mt-1 text-sm font-semibold text-slate-100">
-                {{ step.title }}
-              </h4>
-              <p class="mt-1.5 text-sm leading-relaxed text-slate-400">
-                {{ step.description }}
+              <p class="mt-1 text-sm font-semibold text-slate-100">
+                {{ pipelineSteps[selectedPipelineIndex].title }}
+              </p>
+              <p class="mt-1 text-xs leading-relaxed text-slate-400">
+                {{ pipelineSteps[selectedPipelineIndex].description }}
               </p>
             </div>
+          </div>
+          <div class="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-500/50 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
+              :disabled="selectedPipelineIndex === 0"
+              @click="previousPipelineStep"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              class="rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-2 text-xs font-medium text-cyan-200 transition-colors hover:border-cyan-400 hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+              :disabled="selectedPipelineIndex === pipelineSteps.length - 1"
+              @click="nextPipelineStep"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

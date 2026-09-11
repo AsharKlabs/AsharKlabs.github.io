@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useActiveSection } from '../composables/useScrollReveal'
+import { useTheme } from '../composables/useTheme'
 
 const links = [
   { id: 'methodology', label: 'Methodology' },
@@ -11,6 +12,7 @@ const links = [
 
 const activeId = useActiveSection(links.map((l) => l.id))
 const mobileOpen = ref(false)
+const { isDark, toggleTheme } = useTheme()
 </script>
 
 <template>
@@ -46,6 +48,34 @@ const mobileOpen = ref(false)
         >
           Download Resume
         </a>
+        <button
+          type="button"
+          class="rounded-full border border-slate-700 p-2 text-slate-300 transition-colors hover:border-cyan-500/60 hover:text-cyan-400"
+          :aria-label="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
+          :title="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
+          @click="toggleTheme"
+        >
+          <svg
+            v-if="isDark"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v2m0 14v2M5.636 5.636l1.414 1.414m9.9 9.9l1.414 1.414M3 12h2m14 0h2M5.636 18.364l1.414-1.414m9.9-9.9l1.414-1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        </button>
       </div>
 
       <button
@@ -108,6 +138,34 @@ const mobileOpen = ref(false)
         >
           Download Resume
         </a>
+        <button
+          type="button"
+          class="flex items-center gap-2 text-left text-sm font-medium text-slate-300 hover:text-cyan-400"
+          :aria-label="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
+          @click="toggleTheme"
+        >
+          <svg
+            v-if="isDark"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v2m0 14v2M5.636 5.636l1.414 1.414m9.9 9.9l1.414 1.414M3 12h2m14 0h2M5.636 18.364l1.414-1.414m9.9-9.9l1.414-1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+          {{ isDark ? 'Light theme' : 'Dark theme' }}
+        </button>
       </div>
     </div>
   </header>

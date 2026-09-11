@@ -4,6 +4,20 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+[data-theme='light'] {
+  --color-slate-950: #f8fafc;
+  --color-slate-900: #ffffff;
+  --color-slate-800: #e2e8f0;
+  --color-slate-700: #cbd5e1;
+  --color-slate-600: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-400: #475569;
+  --color-slate-300: #334155;
+  --color-slate-200: #1e293b;
+  --color-slate-100: #0f172a;
+  --color-slate-50: #020617;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -31,6 +45,12 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-slate-600;
+}
+
+[data-theme='light'] .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(100, 116, 139, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.12) 1px, transparent 1px);
 }
 
 .bg-grid {
@@ -62,15 +82,43 @@ body {
   animation: scan-line 3s linear infinite;
 }
 
-@keyframes orbit-rotate {
+@keyframes orbit-ring-rotate {
   from {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 .animate-orbit {
-  animation: orbit-rotate 40s linear infinite;
+  animation: orbit-ring-rotate 40s linear infinite;
+  transform-origin: center;
+}
+
+.orbit-track {
+  animation: orbit-ring-rotate 32s linear infinite;
+  transform-origin: center;
+}
+
+.orbit-stage.is-paused .animate-orbit,
+.orbit-stage.is-paused .orbit-track,
+.orbit-stage.is-paused .orbit-node-content {
+  animation-play-state: paused;
+}
+
+.orbit-node-content {
+  animation: orbit-counter-rotate 32s linear infinite;
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@keyframes orbit-counter-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }

@@ -1,12 +1,14 @@
 <script setup>
 import { vReveal } from './composables/useScrollReveal'
 import NavBar from './components/NavBar.vue'
-import AiTerminal from './components/AiTerminal.vue'
-import TelemetryWidget from './components/TelemetryWidget.vue'
+import StatFloater from './components/StatFloater.vue'
+import StatusFloater from './components/StatusFloater.vue'
 import MethodologySection from './components/MethodologySection.vue'
 import BentoGrid from './components/BentoGrid.vue'
 import OpenSourceSection from './components/OpenSourceSection.vue'
 import FooterSection from './components/FooterSection.vue'
+
+const rightX = (width) => (typeof window !== 'undefined' ? window.innerWidth - 24 - width : 1200)
 </script>
 
 <template>
@@ -17,19 +19,76 @@ import FooterSection from './components/FooterSection.vue'
 
     <main class="relative pt-32">
       <section id="top" class="relative px-6 pb-20 text-center">
-        <!-- Floating HUD widgets: draggable, scroll with the hero, desktop-only -->
+        <!-- Floating project signals: draggable, scroll with the hero, desktop-only -->
         <div class="hidden lg:block">
-          <AiTerminal />
-          <TelemetryWidget />
+          <StatusFloater
+            :initial-x="24"
+            :initial-y="8"
+            eyebrow="AI IN PRODUCTION"
+            title="LLM + Contextual Memory"
+            subtitle="RCSI Simulator · LetsUpDoc"
+            icon="M12 3v2m0 14v2M5.636 5.636l1.414 1.414m9.9 9.9l1.414 1.414M3 12h2m14 0h2M5.636 18.364l1.414-1.414m9.9-9.9l1.414-1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+          <StatFloater
+            :initial-x="rightX(192)"
+            :initial-y="8"
+            dot="bg-cyan-400"
+            eyebrow="REAL-TIME SYSTEMS"
+            value="P2P + WS"
+            value-class="text-cyan-300"
+            label="Live streaming · Instant messaging"
+            trend="CODOT · LetsUpDoc"
+            trend-class="text-cyan-400"
+          />
+          <StatFloater
+            :initial-x="rightX(192)"
+            :initial-y="154"
+            dot="bg-emerald-400"
+            eyebrow="CLOUD DELIVERY"
+            value="AWS + MinIO"
+            value-class="text-emerald-300"
+            label="Multi-region · Zero-downtime deploys"
+            trend="CODOT · Production Ops"
+            trend-class="text-emerald-400"
+          />
+          <StatFloater
+            :initial-x="24"
+            :initial-y="158"
+            dot="bg-indigo-400"
+            eyebrow="LIVE DATA"
+            value="250+ plots"
+            value-class="text-indigo-300"
+            label="Geospatial state synced live"
+            trend="Al Msayyan · Leaflet.js"
+            trend-class="text-indigo-400"
+          />
+          <StatusFloater
+            :initial-x="rightX(240)"
+            :initial-y="300"
+            eyebrow="AI-ASSISTED DELIVERY"
+            title="MCP + Agent Workflows"
+            subtitle="Context-first architecture"
+            icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </div>
 
-        <p
+        <div
           v-reveal
-          class="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400"
+          class="mx-auto mb-4 flex flex-wrap items-center justify-center gap-2.5"
         >
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          Karachi, Pakistan
-        </p>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            5+ Yrs Experience
+          </span>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+            Karachi, Pakistan
+          </span>
+        </div>
 
         <h1
           v-reveal="{ delay: 80 }"
