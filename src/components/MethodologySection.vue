@@ -211,7 +211,7 @@ const nextPipelineStep = () => {
       <!-- Panel 1: AI-Accelerated Delivery Pipeline -->
       <div
         v-reveal="{ delay: 100 }"
-        class="group relative mt-14 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        class="group relative mt-14 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
       >
         <div
           class="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-cyan-500/10 via-indigo-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
@@ -335,7 +335,7 @@ const nextPipelineStep = () => {
       <!-- Panel 2: Context-Driven Incremental Updates -->
       <div
         v-reveal="{ delay: 160 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
       >
         <div
           class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
@@ -363,7 +363,7 @@ const nextPipelineStep = () => {
       <!-- Panel 3: Cloud Deployment -->
       <div
         v-reveal="{ delay: 220 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
       >
         <div
           class="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/10 via-cyan-500/10 to-indigo-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
@@ -386,7 +386,7 @@ const nextPipelineStep = () => {
       <!-- Panel 4: Vertical & Horizontal Scaling -->
       <div
         v-reveal="{ delay: 280 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
       >
         <div
           class="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"

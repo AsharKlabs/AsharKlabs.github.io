@@ -44,7 +44,7 @@ const repos = [
           :href="repo.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/40 p-7 transition-all hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10"
+          class="group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface transition-all hover:-translate-y-1 hover:border-emerald-500/50 elevated-shadow"
         >
           <div class="flex items-start justify-between gap-4">
             <h3 class="text-lg font-bold text-slate-50">{{ repo.title }}</h3>

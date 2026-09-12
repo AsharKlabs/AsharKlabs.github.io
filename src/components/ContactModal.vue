@@ -46,7 +46,7 @@ onUnmounted(() => {
       />
 
       <div
-        class="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/95 p-6 shadow-2xl shadow-black/40 sm:p-8"
+        class="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/95 p-6 panel-surface elevated-shadow sm:p-8"
       >
         <button
           type="button"

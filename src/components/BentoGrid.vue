@@ -7,7 +7,7 @@ const projects = [
     label: 'LetsUpMart',
     description:
       'Scaled high-availability retail architectures handling complex product indices, seamless checkout routing, and merchant affiliations.',
-    tags: ['High-Availability', 'Search Indexing', 'Node.js'],
+    tags: ['High-Availability', 'Search Indexing', 'Python Scrapers', 'AI SEO / Page Speed'],
     accent: 'cyan',
     span: 'sm:col-span-2 lg:col-span-2',
     url: 'https://letsupmart.com',
@@ -17,30 +17,30 @@ const projects = [
     label: 'LetsUpDoc',
     description:
       'Architected clinical triage workflows, real-time video consultations, and continuous-memory PHP Swoole environments for zero-latency patient portals.',
-    tags: ['Laravel Octane', 'WebRTC', 'PostgreSQL'],
+    tags: ['Laravel Octane', 'LiveKit', 'MySQL', 'Pinecone'],
     accent: 'emerald',
     span: 'lg:col-span-1',
     url: 'https://letsupdoc.com/pk',
-  },
-  {
-    title: 'Distributed Signage Platform',
-    label: 'CODOT',
-    description:
-      'Led a multi-region disaster recovery failover (AWS Bahrain → Mumbai) and architected custom MinIO storage for the Oman region, paired with a Node.js WebSocket + Coturn P2P streaming layer and a native Kotlin playback client for distributed signage devices.',
-    tags: ['AWS Multi-Region', 'MinIO', 'WebRTC / P2P', 'Kotlin'],
-    accent: 'indigo',
-    span: 'lg:col-span-1',
-    url: 'https://www.getcodot.com/',
   },
   {
     title: 'Live Sports Telemetry',
     label: 'Jamaheer',
     description:
       'Engineered real-time statistical backends and live match tracking pipelines for the Bahrain Premier League.',
-    tags: ['WebSockets', 'Real-Time Data', 'Cloudflare'],
+    tags: ['Real-Time Data', 'Cloudflare'],
+    accent: 'indigo',
+    span: 'lg:col-span-1',
+    url: 'https://jamaheer.co',
+  },
+  {
+    title: 'Distributed Signage Platform',
+    label: 'CODOT',
+    description:
+      'Led a multi-region disaster recovery failover (AWS Bahrain → Mumbai) and architected custom MinIO storage for the Oman region, paired with a Node.js WebSocket + Coturn P2P streaming layer and a native Kotlin playback client for distributed signage devices.',
+    tags: ['AWS Multi-Region', 'MinIO', 'WebRTC / P2P', 'Kotlin', 'WebSockets'],
     accent: 'indigo',
     span: 'sm:col-span-2 lg:col-span-2',
-    url: 'https://jamaheer.co',
+    url: 'https://www.getcodot.com/',
   },
   {
     title: 'Clinical AI Simulation Platform',
@@ -93,7 +93,7 @@ const accentMap = {
       v-for="(project, i) in projects"
       :key="project.label"
       v-reveal="{ delay: (i % 3) * 100 }"
-      class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1"
+      class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 elevated-shadow"
       :class="[accentMap[project.accent].border, project.span]"
       v-bind="
         project.url

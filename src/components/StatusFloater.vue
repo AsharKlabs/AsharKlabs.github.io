@@ -21,7 +21,7 @@ const { style } = useDraggable(card, {
 <template>
   <div
     ref="card"
-    class="pointer-events-auto absolute z-40 w-60 cursor-grab select-none rounded-xl border border-slate-800 bg-slate-900/70 px-4 py-3 shadow-2xl shadow-black/40 backdrop-blur-md transition-colors hover:border-slate-700 active:cursor-grabbing"
+    class="pointer-events-auto absolute z-40 w-60 cursor-grab select-none rounded-xl border border-slate-800 bg-slate-900/80 px-4 py-3 elevated-shadow panel-surface backdrop-blur-md transition-colors hover:border-slate-700 active:cursor-grabbing"
     :style="style"
   >
     <p class="flex items-center gap-1.5 text-[10px] font-medium tracking-wide text-slate-500">
