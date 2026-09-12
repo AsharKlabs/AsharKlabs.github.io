@@ -79,7 +79,7 @@ const selectNext = () => {
     </div>
 
     <div
-      class="mt-8 flex flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+      class="mt-8 hidden flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex sm:flex-row sm:items-center sm:justify-between sm:p-5"
       aria-live="polite"
     >
       <div class="flex min-w-0 items-start gap-3">

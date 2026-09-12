@@ -5,6 +5,7 @@ import StatFloater from './components/StatFloater.vue'
 import StatusFloater from './components/StatusFloater.vue'
 import MethodologySection from './components/MethodologySection.vue'
 import BentoGrid from './components/BentoGrid.vue'
+import TechStackMarquee from './components/TechStackMarquee.vue'
 import OpenSourceSection from './components/OpenSourceSection.vue'
 import FooterSection from './components/FooterSection.vue'
 
@@ -170,6 +171,8 @@ const rightX = (width) => (typeof window !== 'undefined' ? window.innerWidth - 2
           </div>
         </div>
       </section>
+
+      <TechStackMarquee />
 
       <OpenSourceSection />
     </main>

@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { vReveal } from '../composables/useScrollReveal'
 import StepFlow from './StepFlow.vue'
 import CycleFlow from './CycleFlow.vue'
+import ScalePaths from './ScalePaths.vue'
 
 const cddSteps = [
   {
@@ -141,6 +142,40 @@ const deploySteps = [
 ]
 
 const selectedPipelineIndex = ref(0)
+const scalePath = ref('vertical')
+const scalePaused = ref(false)
+let scaleTimer = null
+
+const startScaleTimer = () => {
+  stopScaleTimer()
+  scaleTimer = window.setInterval(() => {
+    if (scalePaused.value) return
+    scalePath.value = scalePath.value === 'vertical' ? 'horizontal' : 'vertical'
+  }, 6000)
+}
+
+const stopScaleTimer = () => {
+  if (scaleTimer != null) {
+    window.clearInterval(scaleTimer)
+    scaleTimer = null
+  }
+}
+
+const setScalePath = (next) => {
+  scalePath.value = next
+  startScaleTimer()
+}
+
+const pauseScaleAuto = () => {
+  scalePaused.value = true
+}
+
+const resumeScaleAuto = () => {
+  scalePaused.value = false
+}
+
+onMounted(startScaleTimer)
+onUnmounted(stopScaleTimer)
 
 const selectPipelineStep = (index) => {
   selectedPipelineIndex.value = index
@@ -168,50 +203,22 @@ const nextPipelineStep = () => {
           How I Work
         </h2>
         <p class="mt-4 text-slate-400">
-          Three governed loops — how an engagement starts, how each increment ships,
-          and how it reaches production.
+          Four governed loops — how an engagement starts, how each increment ships,
+          how it reaches production, and how capacity grows.
         </p>
       </div>
 
-      <!-- Panel 1: Context-Driven Incremental Updates -->
+      <!-- Panel 1: AI-Accelerated Delivery Pipeline -->
       <div
         v-reveal="{ delay: 100 }"
         class="group relative mt-14 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
-      >
-        <div
-          class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-        />
-
-        <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
-          Philosophy 01
-        </p>
-        <h3 class="relative mt-2 text-xl font-bold text-slate-50">
-          Context-Driven Incremental Updates
-        </h3>
-        <p class="relative mt-2 max-w-2xl text-sm text-slate-400">
-          Progress stays anchored to what was actually discussed — every increment
-          traces back to a recorded conversation, not a fading memory of one.
-        </p>
-
-        <CycleFlow
-          class="relative mt-8"
-          :steps="cddSteps"
-          center-title="Incremental Loop"
-          center-note="Repeats until sign-off"
-        />
-      </div>
-
-      <!-- Panel 2: AI-Accelerated Delivery Pipeline -->
-      <div
-        v-reveal="{ delay: 160 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
       >
         <div
           class="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-cyan-500/10 via-indigo-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
         />
 
         <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
-          Philosophy 02
+          Philosophy 01
         </p>
         <h3 class="relative mt-2 text-xl font-bold text-slate-50">
           AI-Accelerated Delivery Pipeline
@@ -285,7 +292,7 @@ const nextPipelineStep = () => {
         </div>
 
         <div
-          class="relative mt-8 flex flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          class="relative mt-8 hidden flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex sm:flex-row sm:items-center sm:justify-between sm:p-5"
           aria-live="polite"
         >
           <div class="flex items-start gap-3">
@@ -325,6 +332,34 @@ const nextPipelineStep = () => {
         </div>
       </div>
 
+      <!-- Panel 2: Context-Driven Incremental Updates -->
+      <div
+        v-reveal="{ delay: 160 }"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+      >
+        <div
+          class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+        />
+
+        <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
+          Philosophy 02
+        </p>
+        <h3 class="relative mt-2 text-xl font-bold text-slate-50">
+          Context-Driven Incremental Updates
+        </h3>
+        <p class="relative mt-2 max-w-2xl text-sm text-slate-400">
+          Progress stays anchored to what was actually discussed — every increment
+          traces back to a recorded conversation, not a fading memory of one.
+        </p>
+
+        <CycleFlow
+          class="relative mt-8"
+          :steps="cddSteps"
+          center-title="Incremental Loop"
+          center-note="Repeats until sign-off"
+        />
+      </div>
+
       <!-- Panel 3: Cloud Deployment -->
       <div
         v-reveal="{ delay: 220 }"
@@ -346,6 +381,81 @@ const nextPipelineStep = () => {
         </p>
 
         <StepFlow class="relative mt-8" :steps="deploySteps" />
+      </div>
+
+      <!-- Panel 4: Vertical & Horizontal Scaling -->
+      <div
+        v-reveal="{ delay: 280 }"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+      >
+        <div
+          class="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+        />
+
+        <div class="relative flex items-start justify-between gap-4">
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              Philosophy 04
+            </p>
+            <Transition name="scale-copy" mode="out-in">
+              <div :key="scalePath">
+                <h3 class="mt-2 text-xl font-bold text-slate-50">
+                  {{
+                    scalePath === 'vertical'
+                      ? 'Vertical Scaling'
+                      : 'Horizontal Scaling'
+                  }}
+                </h3>
+                <p class="mt-2 max-w-2xl text-sm text-slate-400">
+                  {{
+                    scalePath === 'vertical'
+                      ? 'Grow one machine — more RAM, CPU, and storage.'
+                      : 'Grow the fleet — more VPS behind a load balancer.'
+                  }}
+                </p>
+              </div>
+            </Transition>
+          </div>
+
+          <div
+            class="flex shrink-0 rounded-lg border border-slate-800 bg-slate-950/50 p-0.5"
+            role="tablist"
+            aria-label="Scaling path"
+          >
+            <button
+              type="button"
+              role="tab"
+              class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
+              :class="
+                scalePath === 'vertical'
+                  ? 'bg-indigo-500/15 text-indigo-300'
+                  : 'text-slate-500 hover:text-slate-300'
+              "
+              :aria-selected="scalePath === 'vertical'"
+              @click="setScalePath('vertical')"
+            >
+              Vertical
+            </button>
+            <button
+              type="button"
+              role="tab"
+              class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
+              :class="
+                scalePath === 'horizontal'
+                  ? 'bg-cyan-500/15 text-cyan-300'
+                  : 'text-slate-500 hover:text-slate-300'
+              "
+              :aria-selected="scalePath === 'horizontal'"
+              @click="setScalePath('horizontal')"
+            >
+              Horizontal
+            </button>
+          </div>
+        </div>
+
+        <div @mouseenter="pauseScaleAuto" @mouseleave="resumeScaleAuto">
+          <ScalePaths v-model="scalePath" />
+        </div>
       </div>
     </div>
   </section>

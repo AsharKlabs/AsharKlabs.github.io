@@ -2,17 +2,23 @@
 import { ref } from 'vue'
 import { useActiveSection } from '../composables/useScrollReveal'
 import { useTheme } from '../composables/useTheme'
+import ContactModal from './ContactModal.vue'
 
 const links = [
   { id: 'methodology', label: 'Methodology' },
   { id: 'work', label: 'Work' },
   { id: 'open-source', label: 'Open Source' },
-  { id: 'contact', label: 'Contact' },
 ]
 
-const activeId = useActiveSection(links.map((l) => l.id))
+const activeId = useActiveSection([...links.map((l) => l.id), 'contact'])
 const mobileOpen = ref(false)
+const contactOpen = ref(false)
 const { isDark, toggleTheme } = useTheme()
+
+function openContact() {
+  contactOpen.value = true
+  mobileOpen.value = false
+}
 </script>
 
 <template>
@@ -41,6 +47,18 @@ const { isDark, toggleTheme } = useTheme()
         >
           {{ link.label }}
         </a>
+        <button
+          type="button"
+          class="text-sm font-medium transition-colors"
+          :class="
+            contactOpen || activeId === 'contact'
+              ? 'text-indigo-400'
+              : 'text-slate-400 hover:text-slate-100'
+          "
+          @click="openContact"
+        >
+          Contact
+        </button>
         <a
           href="/Ashar_Ayub_Resume.pdf"
           download
@@ -130,6 +148,13 @@ const { isDark, toggleTheme } = useTheme()
         >
           {{ link.label }}
         </a>
+        <button
+          type="button"
+          class="text-left text-sm font-medium text-slate-300 hover:text-slate-100"
+          @click="openContact"
+        >
+          Contact
+        </button>
         <a
           href="/Ashar_Ayub_Resume.pdf"
           download
@@ -168,5 +193,7 @@ const { isDark, toggleTheme } = useTheme()
         </button>
       </div>
     </div>
+
+    <ContactModal v-model="contactOpen" />
   </header>
 </template>
