@@ -2,6 +2,7 @@
 import { vReveal } from './composables/useScrollReveal'
 import NavBar from './components/NavBar.vue'
 import HeroBackground from './components/HeroBackground.vue'
+import TypewriterRole from './components/TypewriterRole.vue'
 import StatFloater from './components/StatFloater.vue'
 import StatusFloater from './components/StatusFloater.vue'
 import MethodologySection from './components/MethodologySection.vue'
@@ -122,12 +123,7 @@ const leftCluster = (width, offset = 0) => {
           Ashar Ayub
         </h1>
 
-        <h2
-          v-reveal="{ delay: 160 }"
-          class="relative z-10 mt-4 bg-gradient-to-r from-indigo-400 via-cyan-400 to-emerald-400 bg-clip-text text-xl font-medium text-transparent sm:text-2xl"
-        >
-          Lead Software Engineer | AI-Augmented Architect
-        </h2>
+        <TypewriterRole v-reveal="{ delay: 160 }" />
 
         <p
           v-reveal="{ delay: 240 }"
