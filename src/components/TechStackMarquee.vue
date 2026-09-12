@@ -57,6 +57,18 @@ const track = [...tools, ...tools]
     <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-slate-950 to-transparent sm:w-28" />
     <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-slate-950 to-transparent sm:w-28" />
 
+    <div class="relative mx-auto mb-10 max-w-2xl px-6 text-center">
+      <p class="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+        Stack
+      </p>
+      <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">
+        I can work with these
+      </h2>
+      <p class="mt-3 text-sm text-slate-400 sm:text-base">
+        Languages, frameworks, and platforms I ship production systems on.
+      </p>
+    </div>
+
     <div class="tech-marquee group">
       <div class="tech-marquee-track" role="list">
         <div

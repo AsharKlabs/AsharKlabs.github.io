@@ -39,12 +39,13 @@ const path = defineModel({ type: String, default: 'vertical' })
       :class="path === 'vertical' ? 'bg-indigo-500/50' : 'bg-cyan-500/50'"
     />
 
-    <Transition name="scale-panel" mode="out-in">
-      <div
-        v-if="path === 'vertical'"
-        key="vertical"
-        class="rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.03] p-5 sm:p-8"
-      >
+    <div class="scale-panel-stage relative h-[26rem] sm:h-[28rem]">
+      <Transition name="scale-panel" mode="out-in">
+        <div
+          v-if="path === 'vertical'"
+          key="vertical"
+          class="absolute inset-0 overflow-y-auto rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.03] p-5 sm:p-8"
+        >
         <p class="mb-5 text-center text-[10px] font-semibold uppercase tracking-widest text-indigo-400/70">
           Increase resources
         </p>
@@ -167,7 +168,7 @@ const path = defineModel({ type: String, default: 'vertical' })
       <div
         v-else
         key="horizontal"
-        class="rounded-2xl border border-cyan-500/20 bg-cyan-500/[0.03] p-5 sm:p-8"
+        class="absolute inset-0 overflow-y-auto rounded-2xl border border-cyan-500/20 bg-cyan-500/[0.03] p-5 sm:p-8"
       >
         <p class="mb-5 text-center text-[10px] font-semibold uppercase tracking-widest text-cyan-400/70">
           Spread the load
@@ -258,5 +259,6 @@ const path = defineModel({ type: String, default: 'vertical' })
         </div>
       </div>
     </Transition>
+    </div>
   </div>
 </template>

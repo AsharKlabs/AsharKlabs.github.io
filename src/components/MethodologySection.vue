@@ -393,7 +393,7 @@ const nextPipelineStep = () => {
         />
 
         <div class="relative flex items-start justify-between gap-4">
-          <div class="min-w-0">
+          <div class="min-w-0 min-h-[5.5rem]">
             <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
               Philosophy 04
             </p>

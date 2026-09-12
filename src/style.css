@@ -201,6 +201,10 @@ body {
   transform: translateY(-8px);
 }
 
+.scale-panel-stage {
+  contain: layout;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scale-copy-enter-active,
   .scale-copy-leave-active,
