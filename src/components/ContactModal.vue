@@ -4,8 +4,8 @@ import { onMounted, onUnmounted, watch } from 'vue'
 const open = defineModel({ type: Boolean, default: false })
 
 const email = 'asharproject24@gmail.com'
-const phoneDisplay = '(+92) 340-4859817'
-const phoneHref = 'tel:+923404859817'
+const phoneDisplay = '+92 321 8964094'
+const phoneHref = 'tel:+923218964094'
 
 function close() {
   open.value = false
