@@ -8,6 +8,7 @@ import MethodologySection from '../components/MethodologySection.vue'
 import BentoGrid from '../components/BentoGrid.vue'
 import TechStackMarquee from '../components/TechStackMarquee.vue'
 import OpenSourceSection from '../components/OpenSourceSection.vue'
+import WakaTimeBadge from '../components/WakaTimeBadge.vue'
 
 const rightCluster = (width, offset = 0) => {
   if (typeof window === 'undefined') return 720 + offset
@@ -91,30 +92,34 @@ const leftCluster = (width, offset = 0) => {
           />
         </div>
 
-        <div
-          v-reveal
-          class="relative z-10 mx-auto mb-4 flex flex-wrap items-center justify-center gap-2.5"
-        >
-          <span
-            class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400 panel-surface"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            5+ Yrs Experience
-          </span>
-          <span
-            class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400 panel-surface"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-            Karachi, Pakistan
-          </span>
-        </div>
+        <div class="relative z-10 mx-auto inline-flex flex-col items-center">
+          <WakaTimeBadge />
 
-        <h1
-          v-reveal="{ delay: 80 }"
-          class="relative z-10 whitespace-nowrap text-4xl font-extrabold tracking-tight text-slate-50 sm:text-5xl md:text-6xl"
-        >
-          Ashar Ayub
-        </h1>
+          <div
+            v-reveal
+            class="mb-4 flex flex-wrap items-center justify-center gap-2.5"
+          >
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400 panel-surface"
+            >
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              5+ Yrs Experience
+            </span>
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-400 panel-surface"
+            >
+              <span class="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+              Karachi, Pakistan
+            </span>
+          </div>
+
+          <h1
+            v-reveal="{ delay: 80 }"
+            class="whitespace-nowrap text-4xl font-extrabold tracking-tight text-slate-50 sm:text-5xl md:text-6xl"
+          >
+            Ashar Ayub
+          </h1>
+        </div>
 
         <TypewriterRole v-reveal="{ delay: 160 }" />
 

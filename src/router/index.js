@@ -40,7 +40,8 @@ router.afterEach((to) => {
     return
   }
   document.title =
-    to.meta.title || 'Ashar Ayub — Lead Software Engineer | AI-Augmented Architect'
+    to.meta.title ||
+    'Ashar Ayub — Backend & Infrastructure Engineer | Laravel, AWS, Real-Time Systems, LLM Integration'
 })
 
 export default router
