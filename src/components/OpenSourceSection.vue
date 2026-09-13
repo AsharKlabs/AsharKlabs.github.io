@@ -1,5 +1,6 @@
 <script setup>
 import { vReveal } from '../composables/useScrollReveal'
+import { vTilt } from '../composables/useCardTilt'
 
 // TODO: replace with the real repo URLs once available.
 const repos = [
@@ -41,10 +42,11 @@ const repos = [
           v-for="(repo, i) in repos"
           :key="repo.title"
           v-reveal="{ delay: i * 120 }"
+          v-tilt="{ max: 3.5, scale: 1.01 }"
           :href="repo.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface transition-all hover:-translate-y-1 hover:border-emerald-500/50 elevated-shadow"
+          class="group flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface hover:border-emerald-500/50 elevated-shadow"
         >
           <div class="flex items-start justify-between gap-4">
             <h3 class="text-lg font-bold text-slate-50">{{ repo.title }}</h3>

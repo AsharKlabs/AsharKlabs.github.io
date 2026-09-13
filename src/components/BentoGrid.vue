@@ -1,5 +1,6 @@
 <script setup>
 import { vReveal } from '../composables/useScrollReveal'
+import { vTilt } from '../composables/useCardTilt'
 
 const projects = [
   {
@@ -87,14 +88,15 @@ const accentMap = {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 [perspective:1200px]">
     <component
       :is="project.url ? 'a' : 'div'"
       v-for="(project, i) in projects"
       :key="project.label"
-      v-reveal="{ delay: (i % 3) * 100 }"
-      class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 elevated-shadow"
+      class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-7 panel-surface backdrop-blur-sm elevated-shadow"
       :class="[accentMap[project.accent].border, project.span]"
+      v-tilt="{ max: 4, scale: 1.01 }"
+      v-reveal="{ delay: (i % 3) * 100 }"
       v-bind="
         project.url
           ? {

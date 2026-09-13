@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import { vReveal } from '../composables/useScrollReveal'
+import { vTilt } from '../composables/useCardTilt'
 import StepFlow from './StepFlow.vue'
 import CycleFlow from './CycleFlow.vue'
 import ScalePaths from './ScalePaths.vue'
@@ -146,8 +147,24 @@ const scalePath = ref('vertical')
 const scalePaused = ref(false)
 let scaleTimer = null
 
+const openPanels = ref({
+  pipeline: false,
+  incremental: false,
+  deploy: false,
+  scale: false,
+})
+
+const togglePanel = (key) => {
+  openPanels.value[key] = !openPanels.value[key]
+  if (key === 'scale') {
+    if (openPanels.value.scale) startScaleTimer()
+    else stopScaleTimer()
+  }
+}
+
 const startScaleTimer = () => {
   stopScaleTimer()
+  if (!openPanels.value.scale) return
   scaleTimer = window.setInterval(() => {
     if (scalePaused.value) return
     scalePath.value = scalePath.value === 'vertical' ? 'horizontal' : 'vertical'
@@ -174,7 +191,6 @@ const resumeScaleAuto = () => {
   scalePaused.value = false
 }
 
-onMounted(startScaleTimer)
 onUnmounted(stopScaleTimer)
 
 const selectPipelineStep = (index) => {
@@ -211,123 +227,154 @@ const nextPipelineStep = () => {
       <!-- Panel 1: AI-Accelerated Delivery Pipeline -->
       <div
         v-reveal="{ delay: 100 }"
-        class="group relative mt-14 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        v-tilt="{ max: 2.5, scale: 1.005 }"
+        class="group relative mt-14 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
+        :class="openPanels.pipeline ? 'border-cyan-500/25' : ''"
       >
         <div
           class="pointer-events-none absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-cyan-500/10 via-indigo-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
         />
 
-        <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
-          Philosophy 01
-        </p>
-        <h3 class="relative mt-2 text-xl font-bold text-slate-50">
-          AI-Accelerated Delivery Pipeline
-        </h3>
-        <p class="relative mt-2 max-w-2xl text-sm text-slate-400">
-          From the first stakeholder call to a kicked-off build — every step wired so
-          the brief, not tribal knowledge, drives the work.
-        </p>
-
-        <div class="relative mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
-          <div
-            v-for="(step, i) in pipelineSteps"
-            :key="step.title"
-            class="relative"
-          >
-            <button
-              type="button"
-              class="group flex w-full gap-4 rounded-xl border border-transparent p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-800 hover:bg-slate-950/45 focus-visible:border-cyan-500/40 focus-visible:outline-none"
-              :class="selectedPipelineIndex === i && 'border-cyan-500/30 bg-slate-950/55 shadow-lg shadow-cyan-950/20'"
-              :aria-label="`${step.title}: ${step.description}`"
-              :aria-pressed="selectedPipelineIndex === i"
-              @click="selectPipelineStep(i)"
-              @focus="selectPipelineStep(i)"
-            >
-              <div class="flex flex-col items-center">
-                <div
-                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-950/80 ring-1 transition-all duration-200 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-cyan-400/70"
-                  :class="[
-                    accentClasses[accentCycle[i % 3]].ring,
-                    selectedPipelineIndex === i && 'ring-2 ring-cyan-400/70',
-                  ]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    :class="accentClasses[accentCycle[i % 3]].text"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.75"
-                      :d="step.icon"
-                    />
-                  </svg>
-                </div>
-                <span
-                  v-if="i < pipelineSteps.length - 1"
-                  class="mt-2 hidden w-px flex-1 bg-slate-800 sm:block"
-                />
-              </div>
-              <div class="pb-2">
-                <p class="flex items-center gap-2 font-mono text-xs text-slate-500">
-                  <span :class="accentClasses[accentCycle[i % 3]].dot" class="h-1 w-1 rounded-full" />
-                  STEP {{ String(i + 1).padStart(2, '0') }}
-                </p>
-                <h4
-                  class="mt-1 text-sm font-semibold transition-colors"
-                  :class="selectedPipelineIndex === i ? 'text-cyan-200' : 'text-slate-100'"
-                >
-                  {{ step.title }}
-                </h4>
-                <p class="mt-1.5 text-sm leading-relaxed text-slate-400">
-                  {{ step.description }}
-                </p>
-              </div>
-            </button>
+        <button
+          type="button"
+          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
+          :aria-expanded="openPanels.pipeline"
+          aria-controls="philosophy-pipeline-body"
+          @click="togglePanel('pipeline')"
+        >
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              Philosophy 01
+            </p>
+            <h3 class="mt-2 text-xl font-bold text-slate-50">
+              AI-Accelerated Delivery Pipeline
+            </h3>
+            <p class="mt-2 max-w-2xl text-sm text-slate-400">
+              From the first stakeholder call to a kicked-off build — every step wired so
+              the brief, not tribal knowledge, drives the work.
+            </p>
           </div>
-        </div>
+          <span
+            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
+            :class="openPanels.pipeline && 'rotate-180 border-cyan-500/40 text-cyan-300'"
+            aria-hidden="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
 
         <div
-          class="relative mt-8 hidden flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex sm:flex-row sm:items-center sm:justify-between sm:p-5"
-          aria-live="polite"
+          id="philosophy-pipeline-body"
+          class="grid transition-[grid-template-rows] duration-300 ease-out"
+          :class="openPanels.pipeline ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
         >
-          <div class="flex items-start gap-3">
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 font-mono text-[10px] text-cyan-300">
-              {{ String(selectedPipelineIndex + 1).padStart(2, '0') }}
-            </span>
-            <div>
-              <p class="text-[10px] font-semibold uppercase tracking-widest text-cyan-400/80">
-                Selected stage · {{ selectedPipelineIndex + 1 }} of {{ pipelineSteps.length }}
-              </p>
-              <p class="mt-1 text-sm font-semibold text-slate-100">
-                {{ pipelineSteps[selectedPipelineIndex].title }}
-              </p>
-              <p class="mt-1 text-xs leading-relaxed text-slate-400">
-                {{ pipelineSteps[selectedPipelineIndex].description }}
-              </p>
+          <div class="overflow-hidden">
+            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
+              <div class="relative mt-8 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
+                <div
+                  v-for="(step, i) in pipelineSteps"
+                  :key="step.title"
+                  class="relative"
+                >
+                  <button
+                    type="button"
+                    class="group flex w-full gap-4 rounded-xl border border-transparent p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-800 hover:bg-slate-950/45 focus-visible:border-cyan-500/40 focus-visible:outline-none"
+                    :class="selectedPipelineIndex === i && 'border-cyan-500/30 bg-slate-950/55 shadow-lg shadow-cyan-950/20'"
+                    :aria-label="`${step.title}: ${step.description}`"
+                    :aria-pressed="selectedPipelineIndex === i"
+                    @click="selectPipelineStep(i)"
+                    @focus="selectPipelineStep(i)"
+                  >
+                    <div class="flex flex-col items-center">
+                      <div
+                        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-slate-950/80 ring-1 transition-all duration-200 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-cyan-400/70"
+                        :class="[
+                          accentClasses[accentCycle[i % 3]].ring,
+                          selectedPipelineIndex === i && 'ring-2 ring-cyan-400/70',
+                        ]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          :class="accentClasses[accentCycle[i % 3]].text"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.75"
+                            :d="step.icon"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        v-if="i < pipelineSteps.length - 1"
+                        class="mt-2 hidden w-px flex-1 bg-slate-800 sm:block"
+                      />
+                    </div>
+                    <div class="pb-2">
+                      <p class="flex items-center gap-2 font-mono text-xs text-slate-500">
+                        <span :class="accentClasses[accentCycle[i % 3]].dot" class="h-1 w-1 rounded-full" />
+                        STEP {{ String(i + 1).padStart(2, '0') }}
+                      </p>
+                      <h4
+                        class="mt-1 text-sm font-semibold transition-colors"
+                        :class="selectedPipelineIndex === i ? 'text-cyan-200' : 'text-slate-100'"
+                      >
+                        {{ step.title }}
+                      </h4>
+                      <p class="mt-1.5 text-sm leading-relaxed text-slate-400">
+                        {{ step.description }}
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="relative mt-8 hidden flex-col gap-4 rounded-xl border border-slate-800 bg-slate-950/45 p-4 sm:flex sm:flex-row sm:items-center sm:justify-between sm:p-5"
+                aria-live="polite"
+              >
+                <div class="flex items-start gap-3">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500/10 font-mono text-[10px] text-cyan-300">
+                    {{ String(selectedPipelineIndex + 1).padStart(2, '0') }}
+                  </span>
+                  <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-widest text-cyan-400/80">
+                      Selected stage · {{ selectedPipelineIndex + 1 }} of {{ pipelineSteps.length }}
+                    </p>
+                    <p class="mt-1 text-sm font-semibold text-slate-100">
+                      {{ pipelineSteps[selectedPipelineIndex].title }}
+                    </p>
+                    <p class="mt-1 text-xs leading-relaxed text-slate-400">
+                      {{ pipelineSteps[selectedPipelineIndex].description }}
+                    </p>
+                  </div>
+                </div>
+                <div class="flex shrink-0 items-center gap-2">
+                  <button
+                    type="button"
+                    class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-500/50 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
+                    :disabled="selectedPipelineIndex === 0"
+                    @click="previousPipelineStep"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-2 text-xs font-medium text-cyan-200 transition-colors hover:border-cyan-400 hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                    :disabled="selectedPipelineIndex === pipelineSteps.length - 1"
+                    @click="nextPipelineStep"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-500/50 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
-              :disabled="selectedPipelineIndex === 0"
-              @click="previousPipelineStep"
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              class="rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-3 py-2 text-xs font-medium text-cyan-200 transition-colors hover:border-cyan-400 hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40"
-              :disabled="selectedPipelineIndex === pipelineSteps.length - 1"
-              @click="nextPipelineStep"
-            >
-              Next
-            </button>
           </div>
         </div>
       </div>
@@ -335,126 +382,226 @@ const nextPipelineStep = () => {
       <!-- Panel 2: Context-Driven Incremental Updates -->
       <div
         v-reveal="{ delay: 160 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        v-tilt="{ max: 2.5, scale: 1.005 }"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
+        :class="openPanels.incremental ? 'border-indigo-500/25' : ''"
       >
         <div
           class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
         />
 
-        <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
-          Philosophy 02
-        </p>
-        <h3 class="relative mt-2 text-xl font-bold text-slate-50">
-          Context-Driven Incremental Updates
-        </h3>
-        <p class="relative mt-2 max-w-2xl text-sm text-slate-400">
-          Progress stays anchored to what was actually discussed — every increment
-          traces back to a recorded conversation, not a fading memory of one.
-        </p>
+        <button
+          type="button"
+          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
+          :aria-expanded="openPanels.incremental"
+          aria-controls="philosophy-incremental-body"
+          @click="togglePanel('incremental')"
+        >
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              Philosophy 02
+            </p>
+            <h3 class="mt-2 text-xl font-bold text-slate-50">
+              Context-Driven Incremental Updates
+            </h3>
+            <p class="mt-2 max-w-2xl text-sm text-slate-400">
+              Progress stays anchored to what was actually discussed — every increment
+              traces back to a recorded conversation, not a fading memory of one.
+            </p>
+          </div>
+          <span
+            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
+            :class="openPanels.incremental && 'rotate-180 border-indigo-500/40 text-indigo-300'"
+            aria-hidden="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
 
-        <CycleFlow
-          class="relative mt-8"
-          :steps="cddSteps"
-          center-title="Incremental Loop"
-          center-note="Repeats until sign-off"
-        />
+        <div
+          id="philosophy-incremental-body"
+          class="grid transition-[grid-template-rows] duration-300 ease-out"
+          :class="openPanels.incremental ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        >
+          <div class="overflow-hidden">
+            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
+              <CycleFlow
+                class="relative mt-8"
+                :steps="cddSteps"
+                center-title="Incremental Loop"
+                center-note="Repeats until sign-off"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Panel 3: Cloud Deployment -->
       <div
         v-reveal="{ delay: 220 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        v-tilt="{ max: 2.5, scale: 1.005 }"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
+        :class="openPanels.deploy ? 'border-emerald-500/25' : ''"
       >
         <div
           class="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/10 via-cyan-500/10 to-indigo-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
         />
 
-        <p class="relative text-xs font-semibold uppercase tracking-widest text-slate-500">
-          Philosophy 03
-        </p>
-        <h3 class="relative mt-2 text-xl font-bold text-slate-50">
-          Cloud Deployment
-        </h3>
-        <p class="relative mt-2 max-w-2xl text-sm text-slate-400">
-          Infrastructure owned end to end — from bare server to a secured, routed
-          production endpoint.
-        </p>
+        <button
+          type="button"
+          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
+          :aria-expanded="openPanels.deploy"
+          aria-controls="philosophy-deploy-body"
+          @click="togglePanel('deploy')"
+        >
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              Philosophy 03
+            </p>
+            <h3 class="mt-2 text-xl font-bold text-slate-50">
+              Cloud Deployment
+            </h3>
+            <p class="mt-2 max-w-2xl text-sm text-slate-400">
+              Infrastructure owned end to end — from bare server to a secured, routed
+              production endpoint.
+            </p>
+          </div>
+          <span
+            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
+            :class="openPanels.deploy && 'rotate-180 border-emerald-500/40 text-emerald-300'"
+            aria-hidden="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
 
-        <StepFlow class="relative mt-8" :steps="deploySteps" />
+        <div
+          id="philosophy-deploy-body"
+          class="grid transition-[grid-template-rows] duration-300 ease-out"
+          :class="openPanels.deploy ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        >
+          <div class="overflow-hidden">
+            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
+              <StepFlow class="relative mt-8" :steps="deploySteps" />
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Panel 4: Vertical & Horizontal Scaling -->
       <div
         v-reveal="{ delay: 280 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 panel-surface backdrop-blur-sm transition-all duration-300 hover:border-slate-700 sm:p-10"
+        v-tilt="{ max: 2.5, scale: 1.005 }"
+        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
+        :class="openPanels.scale ? 'border-indigo-500/25' : ''"
       >
         <div
           class="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
         />
 
-        <div class="relative flex items-start justify-between gap-4">
-          <div class="min-w-0 min-h-[5.5rem]">
+        <button
+          type="button"
+          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
+          :aria-expanded="openPanels.scale"
+          aria-controls="philosophy-scale-body"
+          @click="togglePanel('scale')"
+        >
+          <div class="min-w-0">
             <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
               Philosophy 04
             </p>
-            <Transition name="scale-copy" mode="out-in">
-              <div :key="scalePath">
-                <h3 class="mt-2 text-xl font-bold text-slate-50">
-                  {{
-                    scalePath === 'vertical'
-                      ? 'Vertical Scaling'
-                      : 'Horizontal Scaling'
-                  }}
-                </h3>
-                <p class="mt-2 max-w-2xl text-sm text-slate-400">
-                  {{
-                    scalePath === 'vertical'
-                      ? 'Grow one machine — more RAM, CPU, and storage.'
-                      : 'Grow the fleet — more VPS behind a load balancer.'
-                  }}
-                </p>
-              </div>
-            </Transition>
+            <h3 class="mt-2 text-xl font-bold text-slate-50">
+              Vertical &amp; Horizontal Scaling
+            </h3>
+            <p class="mt-2 max-w-2xl text-sm text-slate-400">
+              Grow one machine or grow the fleet — capacity paths for the same workload.
+            </p>
           </div>
-
-          <div
-            class="flex shrink-0 rounded-lg border border-slate-800 bg-slate-950/50 p-0.5"
-            role="tablist"
-            aria-label="Scaling path"
+          <span
+            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
+            :class="openPanels.scale && 'rotate-180 border-indigo-500/40 text-indigo-300'"
+            aria-hidden="true"
           >
-            <button
-              type="button"
-              role="tab"
-              class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
-              :class="
-                scalePath === 'vertical'
-                  ? 'bg-indigo-500/15 text-indigo-300'
-                  : 'text-slate-500 hover:text-slate-300'
-              "
-              :aria-selected="scalePath === 'vertical'"
-              @click="setScalePath('vertical')"
-            >
-              Vertical
-            </button>
-            <button
-              type="button"
-              role="tab"
-              class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
-              :class="
-                scalePath === 'horizontal'
-                  ? 'bg-cyan-500/15 text-cyan-300'
-                  : 'text-slate-500 hover:text-slate-300'
-              "
-              :aria-selected="scalePath === 'horizontal'"
-              @click="setScalePath('horizontal')"
-            >
-              Horizontal
-            </button>
-          </div>
-        </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
 
-        <div @mouseenter="pauseScaleAuto" @mouseleave="resumeScaleAuto">
-          <ScalePaths v-model="scalePath" />
+        <div
+          id="philosophy-scale-body"
+          class="grid transition-[grid-template-rows] duration-300 ease-out"
+          :class="openPanels.scale ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        >
+          <div class="overflow-hidden">
+            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
+              <div class="relative mt-8 flex items-start justify-between gap-4">
+                <div class="min-w-0 min-h-[5.5rem]">
+                  <Transition name="scale-copy" mode="out-in">
+                    <div :key="scalePath">
+                      <h4 class="text-lg font-bold text-slate-50">
+                        {{
+                          scalePath === 'vertical'
+                            ? 'Vertical Scaling'
+                            : 'Horizontal Scaling'
+                        }}
+                      </h4>
+                      <p class="mt-2 max-w-2xl text-sm text-slate-400">
+                        {{
+                          scalePath === 'vertical'
+                            ? 'Grow one machine — more RAM, CPU, and storage.'
+                            : 'Grow the fleet — more VPS behind a load balancer.'
+                        }}
+                      </p>
+                    </div>
+                  </Transition>
+                </div>
+
+                <div
+                  class="flex shrink-0 rounded-lg border border-slate-800 bg-slate-950/50 p-0.5"
+                  role="tablist"
+                  aria-label="Scaling path"
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
+                    :class="
+                      scalePath === 'vertical'
+                        ? 'bg-indigo-500/15 text-indigo-300'
+                        : 'text-slate-500 hover:text-slate-300'
+                    "
+                    :aria-selected="scalePath === 'vertical'"
+                    @click.stop="setScalePath('vertical')"
+                  >
+                    Vertical
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
+                    :class="
+                      scalePath === 'horizontal'
+                        ? 'bg-cyan-500/15 text-cyan-300'
+                        : 'text-slate-500 hover:text-slate-300'
+                    "
+                    :aria-selected="scalePath === 'horizontal'"
+                    @click.stop="setScalePath('horizontal')"
+                  >
+                    Horizontal
+                  </button>
+                </div>
+              </div>
+
+              <div @mouseenter="pauseScaleAuto" @mouseleave="resumeScaleAuto">
+                <ScalePaths v-model="scalePath" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

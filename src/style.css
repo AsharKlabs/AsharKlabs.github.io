@@ -90,6 +90,26 @@ body {
     0 12px 32px -10px rgb(15 23 42 / 0.14);
 }
 
+.tilt-card {
+  transform-style: preserve-3d;
+}
+
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  transition: opacity 0.35s ease;
+}
+
+[data-theme='light'] .tilt-glare {
+  mix-blend-mode: multiply;
+  opacity: 0;
+}
+
 [data-theme='light'] ::selection {
   background-color: rgb(99 102 241 / 0.2);
   color: #0f172a;
