@@ -44,8 +44,8 @@ const { style } = useDraggable(card, {
         </svg>
       </div>
       <div class="min-w-0">
-        <p class="truncate text-xs font-semibold text-slate-100">{{ title }}</p>
-        <p class="truncate text-[11px] text-slate-500">{{ subtitle }}</p>
+        <p class="text-xs font-semibold leading-snug text-slate-100">{{ title }}</p>
+        <p class="mt-0.5 text-[11px] leading-snug text-slate-500">{{ subtitle }}</p>
       </div>
     </div>
   </div>

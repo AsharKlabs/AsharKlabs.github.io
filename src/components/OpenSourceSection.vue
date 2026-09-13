@@ -2,21 +2,20 @@
 import { vReveal } from '../composables/useScrollReveal'
 import { vTilt } from '../composables/useCardTilt'
 
-// TODO: replace with the real repo URLs once available.
 const repos = [
   {
-    title: 'High-Performance Laravel Octane Enterprise Boilerplate',
+    title: 'Laravel Octane Starter',
     description:
-      'A production-hardened starter for Laravel applications running on Swoole/Octane — built for continuous-memory performance, enterprise-grade architecture, and horizontal scale from day one.',
-    tags: ['Laravel', 'Octane', 'Swoole', 'Enterprise Architecture'],
-    url: 'https://github.com/AsharKlabs',
+      'A sample Laravel + Swoole/Octane boilerplate exploring continuous-memory app structure and horizontal scale patterns.',
+    tags: ['Laravel', 'Octane', 'Swoole'],
+    url: 'https://github.com/AsharKlabs/laravel-octane-enterprise-boilerplate',
   },
   {
-    title: 'FastAPI AI-Augmented Architecture Boilerplate',
+    title: 'FastAPI AI / MCP Starter',
     description:
-      'An opinionated FastAPI foundation for building LLM-integrated services, structured for MCP tooling and agentic workflows with clean separation between AI orchestration and core business logic.',
-    tags: ['FastAPI', 'LLM Integration', 'MCP', 'Agentic Workflows'],
-    url: 'https://github.com/AsharKlabs',
+      'A sample FastAPI layout for LLM-integrated services with MCP tooling and agent-style workflows.',
+    tags: ['FastAPI', 'LLM', 'MCP'],
+    url: 'https://github.com/AsharKlabs/fastapi-ai-mcp-boilerplate',
   },
 ]
 </script>
@@ -32,8 +31,7 @@ const repos = [
           Open Source
         </h2>
         <p class="mt-4 text-slate-400">
-          Flagship boilerplates I maintain for teams shipping AI-augmented,
-          production-grade backends.
+          Sample boilerplates you can explore — starters and reference layouts.
         </p>
       </div>
 

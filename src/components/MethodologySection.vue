@@ -1,10 +1,8 @@
 <script setup>
-import { onUnmounted, ref } from 'vue'
+import { ref } from 'vue'
 import { vReveal } from '../composables/useScrollReveal'
 import { vTilt } from '../composables/useCardTilt'
-import StepFlow from './StepFlow.vue'
 import CycleFlow from './CycleFlow.vue'
-import ScalePaths from './ScalePaths.vue'
 
 const cddSteps = [
   {
@@ -94,7 +92,7 @@ const pipelineSteps = [
     title: 'Plan Development Workflows',
     description:
       'Plan the development workflow and sprint breakdown directly from the brief.',
-    icon: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.875 2.437c.317.159.69.159 1.006 0z',
+    icon: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317.159.69.159 1.006 0l4.875 2.437c.317.159.69.159 1.006 0z',
   },
   {
     title: 'Development Kickoff',
@@ -103,95 +101,15 @@ const pipelineSteps = [
   },
 ]
 
-const deploySteps = [
-  {
-    label: 'Provision the Server',
-    description: 'Stand up and size the Ubuntu / AWS environment for the workload.',
-    icon: 'M2.25 6.75a3 3 0 013-3h13.5a3 3 0 013 3v1.5a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-1.5zM2.25 15.75a3 3 0 013-3h13.5a3 3 0 013 3v1.5a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-1.5zM6.75 8.25h.008v.008H6.75V8.25zm0 9h.008v.008H6.75v-.008z',
-    accent: 'text-slate-300',
-    ring: 'ring-slate-700',
-  },
-  {
-    label: 'Set Up Web Server',
-    description: 'Configure Nginx, Octane / FPM workers, queues, and scheduled jobs.',
-    icon: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75',
-    accent: 'text-indigo-300',
-    ring: 'ring-indigo-500/40',
-  },
-  {
-    label: 'Deploy the Application',
-    description: 'Ship the build through zero-downtime GitHub Actions pipelines.',
-    icon: 'M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z',
-    accent: 'text-cyan-300',
-    ring: 'ring-cyan-500/40',
-    live: true,
-  },
-  {
-    label: 'Route the Domain',
-    description: 'Point DNS, load balancers, and Cloudflare routing at the environment.',
-    icon: 'M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418',
-    accent: 'text-indigo-300',
-    ring: 'ring-indigo-500/40',
-  },
-  {
-    label: 'Secure the Application',
-    description: 'Terminate SSL, harden firewalls, and gate every admin surface.',
-    icon: 'M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z',
-    accent: 'text-emerald-300',
-    ring: 'ring-emerald-500/40',
-  },
-]
-
 const selectedPipelineIndex = ref(0)
-const scalePath = ref('vertical')
-const scalePaused = ref(false)
-let scaleTimer = null
-
 const openPanels = ref({
   pipeline: false,
   incremental: false,
-  deploy: false,
-  scale: false,
 })
 
 const togglePanel = (key) => {
   openPanels.value[key] = !openPanels.value[key]
-  if (key === 'scale') {
-    if (openPanels.value.scale) startScaleTimer()
-    else stopScaleTimer()
-  }
 }
-
-const startScaleTimer = () => {
-  stopScaleTimer()
-  if (!openPanels.value.scale) return
-  scaleTimer = window.setInterval(() => {
-    if (scalePaused.value) return
-    scalePath.value = scalePath.value === 'vertical' ? 'horizontal' : 'vertical'
-  }, 6000)
-}
-
-const stopScaleTimer = () => {
-  if (scaleTimer != null) {
-    window.clearInterval(scaleTimer)
-    scaleTimer = null
-  }
-}
-
-const setScalePath = (next) => {
-  scalePath.value = next
-  startScaleTimer()
-}
-
-const pauseScaleAuto = () => {
-  scalePaused.value = true
-}
-
-const resumeScaleAuto = () => {
-  scalePaused.value = false
-}
-
-onUnmounted(stopScaleTimer)
 
 const selectPipelineStep = (index) => {
   selectedPipelineIndex.value = index
@@ -202,9 +120,7 @@ const previousPipelineStep = () => {
 }
 
 const nextPipelineStep = () => {
-  selectPipelineStep(
-    Math.min(pipelineSteps.length - 1, selectedPipelineIndex.value + 1),
-  )
+  selectPipelineStep(Math.min(pipelineSteps.length - 1, selectedPipelineIndex.value + 1))
 }
 </script>
 
@@ -213,18 +129,18 @@ const nextPipelineStep = () => {
     <div class="mx-auto max-w-6xl">
       <div v-reveal class="mx-auto max-w-2xl text-center">
         <p class="text-sm font-semibold uppercase tracking-widest text-indigo-400">
-          Architectural Philosophy
+          Client Engagements
         </p>
         <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">
-          How I Work
+          How I Run Engagements
         </h2>
         <p class="mt-4 text-slate-400">
-          Four governed loops — how an engagement starts, how each increment ships,
-          how it reaches production, and how capacity grows.
+          Two operating loops I use on freelance and consulting work — how an engagement
+          starts, and how each increment stays tied to what was actually discussed.
         </p>
       </div>
 
-      <!-- Panel 1: AI-Accelerated Delivery Pipeline -->
+      <!-- Engagement 01: AI-Accelerated Delivery Pipeline -->
       <div
         v-reveal="{ delay: 100 }"
         v-tilt="{ max: 2.5, scale: 1.005 }"
@@ -239,12 +155,12 @@ const nextPipelineStep = () => {
           type="button"
           class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
           :aria-expanded="openPanels.pipeline"
-          aria-controls="philosophy-pipeline-body"
+          aria-controls="engagement-pipeline-body"
           @click="togglePanel('pipeline')"
         >
           <div class="min-w-0">
             <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Philosophy 01
+              Engagement 01
             </p>
             <h3 class="mt-2 text-xl font-bold text-slate-50">
               AI-Accelerated Delivery Pipeline
@@ -266,7 +182,7 @@ const nextPipelineStep = () => {
         </button>
 
         <div
-          id="philosophy-pipeline-body"
+          id="engagement-pipeline-body"
           class="grid transition-[grid-template-rows] duration-300 ease-out"
           :class="openPanels.pipeline ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
         >
@@ -379,7 +295,7 @@ const nextPipelineStep = () => {
         </div>
       </div>
 
-      <!-- Panel 2: Context-Driven Incremental Updates -->
+      <!-- Engagement 02: Context-Driven Incremental Updates -->
       <div
         v-reveal="{ delay: 160 }"
         v-tilt="{ max: 2.5, scale: 1.005 }"
@@ -394,12 +310,12 @@ const nextPipelineStep = () => {
           type="button"
           class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
           :aria-expanded="openPanels.incremental"
-          aria-controls="philosophy-incremental-body"
+          aria-controls="engagement-incremental-body"
           @click="togglePanel('incremental')"
         >
           <div class="min-w-0">
             <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Philosophy 02
+              Engagement 02
             </p>
             <h3 class="mt-2 text-xl font-bold text-slate-50">
               Context-Driven Incremental Updates
@@ -421,7 +337,7 @@ const nextPipelineStep = () => {
         </button>
 
         <div
-          id="philosophy-incremental-body"
+          id="engagement-incremental-body"
           class="grid transition-[grid-template-rows] duration-300 ease-out"
           :class="openPanels.incremental ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
         >
@@ -433,173 +349,6 @@ const nextPipelineStep = () => {
                 center-title="Incremental Loop"
                 center-note="Repeats until sign-off"
               />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel 3: Cloud Deployment -->
-      <div
-        v-reveal="{ delay: 220 }"
-        v-tilt="{ max: 2.5, scale: 1.005 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
-        :class="openPanels.deploy ? 'border-emerald-500/25' : ''"
-      >
-        <div
-          class="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/10 via-cyan-500/10 to-indigo-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-        />
-
-        <button
-          type="button"
-          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
-          :aria-expanded="openPanels.deploy"
-          aria-controls="philosophy-deploy-body"
-          @click="togglePanel('deploy')"
-        >
-          <div class="min-w-0">
-            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Philosophy 03
-            </p>
-            <h3 class="mt-2 text-xl font-bold text-slate-50">
-              Cloud Deployment
-            </h3>
-            <p class="mt-2 max-w-2xl text-sm text-slate-400">
-              Infrastructure owned end to end — from bare server to a secured, routed
-              production endpoint.
-            </p>
-          </div>
-          <span
-            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
-            :class="openPanels.deploy && 'rotate-180 border-emerald-500/40 text-emerald-300'"
-            aria-hidden="true"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-
-        <div
-          id="philosophy-deploy-body"
-          class="grid transition-[grid-template-rows] duration-300 ease-out"
-          :class="openPanels.deploy ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
-        >
-          <div class="overflow-hidden">
-            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
-              <StepFlow class="relative mt-8" :steps="deploySteps" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel 4: Vertical & Horizontal Scaling -->
-      <div
-        v-reveal="{ delay: 280 }"
-        v-tilt="{ max: 2.5, scale: 1.005 }"
-        class="group relative mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 panel-surface backdrop-blur-sm transition-colors duration-300 hover:border-slate-700"
-        :class="openPanels.scale ? 'border-indigo-500/25' : ''"
-      >
-        <div
-          class="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-indigo-500/10 via-cyan-500/10 to-emerald-500/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-        />
-
-        <button
-          type="button"
-          class="relative flex w-full items-start justify-between gap-4 p-8 text-left sm:p-10"
-          :aria-expanded="openPanels.scale"
-          aria-controls="philosophy-scale-body"
-          @click="togglePanel('scale')"
-        >
-          <div class="min-w-0">
-            <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Philosophy 04
-            </p>
-            <h3 class="mt-2 text-xl font-bold text-slate-50">
-              Vertical &amp; Horizontal Scaling
-            </h3>
-            <p class="mt-2 max-w-2xl text-sm text-slate-400">
-              Grow one machine or grow the fleet — capacity paths for the same workload.
-            </p>
-          </div>
-          <span
-            class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-800 bg-slate-950/60 text-slate-400 transition-transform duration-300"
-            :class="openPanels.scale && 'rotate-180 border-indigo-500/40 text-indigo-300'"
-            aria-hidden="true"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-
-        <div
-          id="philosophy-scale-body"
-          class="grid transition-[grid-template-rows] duration-300 ease-out"
-          :class="openPanels.scale ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
-        >
-          <div class="overflow-hidden">
-            <div class="relative border-t border-slate-800/80 px-8 pb-8 sm:px-10 sm:pb-10">
-              <div class="relative mt-8 flex items-start justify-between gap-4">
-                <div class="min-w-0 min-h-[5.5rem]">
-                  <Transition name="scale-copy" mode="out-in">
-                    <div :key="scalePath">
-                      <h4 class="text-lg font-bold text-slate-50">
-                        {{
-                          scalePath === 'vertical'
-                            ? 'Vertical Scaling'
-                            : 'Horizontal Scaling'
-                        }}
-                      </h4>
-                      <p class="mt-2 max-w-2xl text-sm text-slate-400">
-                        {{
-                          scalePath === 'vertical'
-                            ? 'Grow one machine — more RAM, CPU, and storage.'
-                            : 'Grow the fleet — more VPS behind a load balancer.'
-                        }}
-                      </p>
-                    </div>
-                  </Transition>
-                </div>
-
-                <div
-                  class="flex shrink-0 rounded-lg border border-slate-800 bg-slate-950/50 p-0.5"
-                  role="tablist"
-                  aria-label="Scaling path"
-                >
-                  <button
-                    type="button"
-                    role="tab"
-                    class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
-                    :class="
-                      scalePath === 'vertical'
-                        ? 'bg-indigo-500/15 text-indigo-300'
-                        : 'text-slate-500 hover:text-slate-300'
-                    "
-                    :aria-selected="scalePath === 'vertical'"
-                    @click.stop="setScalePath('vertical')"
-                  >
-                    Vertical
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    class="rounded-md px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors sm:px-3"
-                    :class="
-                      scalePath === 'horizontal'
-                        ? 'bg-cyan-500/15 text-cyan-300'
-                        : 'text-slate-500 hover:text-slate-300'
-                    "
-                    :aria-selected="scalePath === 'horizontal'"
-                    @click.stop="setScalePath('horizontal')"
-                  >
-                    Horizontal
-                  </button>
-                </div>
-              </div>
-
-              <div @mouseenter="pauseScaleAuto" @mouseleave="resumeScaleAuto">
-                <ScalePaths v-model="scalePath" />
-              </div>
             </div>
           </div>
         </div>
