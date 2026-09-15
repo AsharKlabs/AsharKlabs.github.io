@@ -46,7 +46,7 @@ const projects = [
     writeUps: [
       {
         to: '/writing/codot-bahrain-mumbai-migration',
-        label: 'Bahrain → Mumbai migration',
+        label: 'The staging server went down first',
       },
       {
         to: '/writing/codot-minio-oman',

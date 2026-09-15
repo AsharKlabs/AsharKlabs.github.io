@@ -1,11 +1,11 @@
 export const posts = [
   {
     slug: 'codot-bahrain-mumbai-migration',
-    title: 'Rebuilding CODOT after the Bahrain data centres were destroyed',
+    title: 'The staging server went down first',
     description:
-      'An emergency AWS migration from Bahrain to Mumbai with no recoverable backups, and what it taught me about treating backup as a design requirement.',
+      'Rebuilding a signage platform in a new AWS region after the old one stopped existing.',
     date: '2024',
-    readingMinutes: 6,
+    readingMinutes: 7,
     tags: ['CODOT', 'AWS', 'Incident Response', 'Migration'],
   },
   {
